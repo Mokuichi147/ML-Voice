@@ -21,7 +21,7 @@ class AudioWave:
             sampling_rate: int = 44100,
             chunk: int = 1024,
             channels: int = 1
-            ):
+            ) -> None:
         # mic or file
         self.read_mode = read_mode
         # mic setting
@@ -43,7 +43,7 @@ class AudioWave:
         self.wave_write     = None
 
 
-    def set_mic_from_devicename(self, device_name: str):
+    def set_mic_from_devicename(self, device_name: str) -> None:
         _device_index = self.mic_device_index
         for device_index in range(self.pyaudio_object.get_device_count()):
             device_info = self.pyaudio_object.get_device_info_by_index(device_index)
@@ -53,7 +53,7 @@ class AudioWave:
         self.mic_device_index = _device_index
 
 
-    def read_close(self):
+    def read_close(self) -> None:
         if self.is_mic_opened:
             self.pyaudio_stream.close()
             self.is_mic_opened = False
@@ -61,22 +61,22 @@ class AudioWave:
             self.wave_read.close()
             self.is_file_read_opened = False
 
-    def write_close(self):
+    def write_close(self) -> None:
         if self.is_file_write_opened:
             self.wave_write.close()
             self.is_file_write_opened = False
 
-    def close(self):
+    def close(self) -> None:
         self.read_close()
         self.write_close()
     
-    def write_and_close(self, audio_wave):
+    def write_and_close(self, audio_wave: np.ndarray) -> None:
         if self.read_mode == ReadMode.MIC:
             self.write(audio_wave)
         self.close()
 
 
-    def read_open(self):
+    def read_open(self) -> None:
         if self.read_mode == ReadMode.MIC and not self.is_mic_opened:
             self.pyaudio_stream = self.pyaudio_object.open(
                 format = pyaudio.paInt16,
@@ -92,7 +92,7 @@ class AudioWave:
             self.wave_read = wave.open(self.load_file_path, 'rb')
             self.is_file_read_opened = True
 
-    def write_open(self):
+    def write_open(self) -> None:
         if not self.is_file_write_opened:
             self.wave_write = wave.open(self.save_file_path, 'wb')
             self.wave_write.setnchannels(self.channels)
@@ -102,12 +102,12 @@ class AudioWave:
             self.wave_write.setcomptype('NONE', 'not compressed')
             self.is_file_write_opened = True
     
-    def open(self):
+    def open(self) -> None:
         self.read_open()
         self.write_open()
 
 
-    def change_readmode(self, read_mode: ReadMode, is_open: bool = True):
+    def change_readmode(self, read_mode: ReadMode, is_open: bool = True) -> None:
         if self.read_mode == read_mode:
             return
         elif self.is_mic_opened or self.is_file_read_opened:
@@ -130,11 +130,11 @@ class AudioWave:
             self.listen(audio_wave)
         return audio_wave
 
-    def write(self, audio_wave: np.ndarray):
+    def write(self, audio_wave: np.ndarray) -> None:
         if not self.is_file_write_opened:
             self.write_open()
         self.wave_write.setnframes(audio_wave.shape[0])
         self.wave_write.writeframes(audio_wave.tobytes())
     
-    def listen(self, audio_wave: np.ndarray):
+    def listen(self, audio_wave: np.ndarray) -> None:
         simpleaudio.play_buffer(audio_wave, self.channels, 2, self.sampling_rate)
