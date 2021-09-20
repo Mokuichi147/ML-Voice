@@ -5,7 +5,7 @@ Real-time voice, in a form suitable for machine learning.
 
 ## Installation
 ```
-pip install -U numpy pyaudio simpleaudio librosa matplotlib pillow
+pip install -U numpy pyaudio simpleaudio librosa PyWavelets matplotlib pillow
 ```
 
 
