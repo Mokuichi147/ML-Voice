@@ -3,8 +3,8 @@ __pycache__/
 temp/
 
 # test files
-*-test.ipynb
-*-test.py
+*_test.ipynb
+*_test.py
 
 # audio files
 *.wav
