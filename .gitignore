@@ -1,6 +1,13 @@
 # dirs
-__pycache__/
-temp/
+/**/__pycache__/
+/build/
+/dist/
+/temp/
+
+# files
+/poetry.lock
+/.python-version
+/.DS_Store
 
 # test files
 *_test.ipynb
